@@ -3,7 +3,7 @@ services:
   phinx.app:
     build:
       context: phinx
-      dockerfile: runtimes/8.0/Dockerfile
+      dockerfile: runtimes/7.4/Dockerfile
       args:
         SYSTEMUSERID: ${SYSTEMUSERID:-1000}
         SYSTEMUSERNAME: ${SYSTEMUSERNAME:-phinx}

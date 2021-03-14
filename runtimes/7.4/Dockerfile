@@ -14,16 +14,14 @@ ARG SYSTEMGROUPNAME
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 RUN apk update --no-cache && apk upgrade --no-cache && \
-    apk --no-cache --update add bash nginx supervisor curl php8 php8-fpm php8-opcache php8-mysqli \
-    php8-json php8-openssl php8-curl php8-zlib php8-xml php8-phar php8-intl php8-dom \
-    php8-xmlwriter php8-xmlreader php8-fileinfo php8-tokenizer php8-ctype php8-session \
-    php8-mbstring php8-gd php8-pdo php8-pdo_mysql
+    apk --no-cache --update add bash nginx supervisor curl php7 php7-fpm php7-opcache php7-mysqli \
+    php7-json php7-openssl php7-curl php7-zlib php7-xml php7-phar php7-intl php7-dom \
+    php7-xmlwriter php7-xmlreader php7-fileinfo php7-tokenizer php7-ctype php7-session \
+    php7-mbstring php7-gd php7-pdo php7-pdo_mysql
 
 RUN rm /etc/nginx/conf.d/default.conf
 
 COPY nginx/default.conf /etc/nginx/http.d/default.conf
-
-RUN ln -s /usr/bin/php8 /usr/bin/php
 
 RUN php -r "readfile('http://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --filename=composer && \
     apk --no-cache --update add nodejs nodejs-npm
@@ -43,9 +41,9 @@ RUN chown -R $SYSTEMUSERID /var/www/app && \
 
 WORKDIR /var/www/app
 
-COPY runtimes/8.0/php.ini /etc/php8/php.ini
-COPY runtimes/8.0/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-COPY runtimes/8.0/start-container /usr/local/bin/start-container
+COPY runtimes/7.4/php.ini /etc/php7.4/php.ini
+COPY runtimes/7.4/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY runtimes/7.4/start-container /usr/local/bin/start-container
 
 RUN chmod +x /usr/local/bin/start-container
 
