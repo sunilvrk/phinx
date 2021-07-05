@@ -14,7 +14,7 @@ services:
     environment:
       SYSTEMUSERID: ${SYSTEMUSERID:-1000}
     volumes:
-      - '.:/var/www/app'
+      - './:/var/www/app'
     networks:
       - phinx
     depends_on:
