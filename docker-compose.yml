@@ -1,44 +1,60 @@
 version: '3'
-services:
-  phinx.app:
-    build:
-      context: phinx
-      dockerfile: runtimes/7.4/Dockerfile
-      args:
-        SYSTEMUSERID: ${SYSTEMUSERID:-1000}
-        SYSTEMUSERNAME: ${SYSTEMUSERNAME:-phinx}
-        SYSTEMGROUPID: ${SYSTEMGROUPID:-1000}
-        SYSTEMGROUPNAME: ${SYSTEMGROUPNAME:-phinx}
-    ports:
-      - ${APP_PORT:-80}:8080
-    environment:
-      SYSTEMUSERID: ${SYSTEMUSERID:-1000}
-    volumes:
-      - './:/var/www/app'
-    networks:
-      - phinx
-    depends_on:
-      - mysql
 
-  mysql:
-    image: 'mysql:8.0'
+services:
+  # PHP7.4-fpm: this container contains the app
+  app:
+    context: phinx
+    dockerfile: runtimes/7.4/Dockerfile
+    restart: unless-stopped
+    tty: true
+    ports:
+      - 9000:9000
+    volumes:
+      - ./:/var/www
+      - ./phinx/runtimes/7.4/php.ini:/usr/local/etc/php/conf.d/local.ini
+    networks:
+      - app-network
+    depends_on:
+      - db
+
+  # Nginx webserver
+  server:
+    image: nginx:alpine
+    restart: unless-stopped
+    tty: true
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./:/var/www
+      - ./phinx/nginx/conf.d/:/etc/nginx/conf.d/
+    networks:
+      - app-network
+    depends_on:
+      - app
+
+  # MySQL database
+  db:
+    image: mysql:8.0
     ports:
       - ${FORWARD_DB_PORT:-3306}:3306
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-secret}
       MYSQL_DATABASE: ${DB_DATABASE:-mysql_db}
-      MYSQL_USER: ${DB_USERNAME:-phinx_user}
+      MYSQL_USER: ${DB_USERNAME:-db_user}
       MYSQL_PASSWORD: ${DB_PASSWORD:-secret}
       MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
     volumes:
-      - 'phinxmysql:/var/lib/mysql'
+      - dbdata:/var/lib/mysql
     networks:
-      - phinx
+      - app-network
 
+# Docker network
 networks:
-  phinx:
+  app-network:
     driver: bridge
 
+# Volumes
 volumes:
-  phinxmysql:
+  dbdata:
     driver: local
