@@ -27,7 +27,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-secret}
       MYSQL_DATABASE: ${DB_DATABASE:-mysql_db}
-      MYSQL_USER: ${DB_USERNAME:-root}
+      MYSQL_USER: ${DB_USERNAME:-phinx_user}
       MYSQL_PASSWORD: ${DB_PASSWORD:-secret}
       MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
     volumes:
