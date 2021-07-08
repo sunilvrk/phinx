@@ -3,15 +3,15 @@ version: '3'
 services:
   # PHP7.4-fpm: this container contains the app
   app:
-    context: phinx
-    dockerfile: runtimes/7.4/Dockerfile
+    build:
+      context: phinx
+      dockerfile: runtimes/7.4/Dockerfile
     restart: unless-stopped
     tty: true
     ports:
       - 9000:9000
     volumes:
       - ./:/var/www
-      - --chown=www:www . /var/www
       - ./phinx/runtimes/7.4/php.ini:/usr/local/etc/php/conf.d/local.ini
     user: www
     networks:
