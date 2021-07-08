@@ -11,7 +11,9 @@ services:
       - 9000:9000
     volumes:
       - ./:/var/www
+      - --chown=www:www . /var/www
       - ./phinx/runtimes/7.4/php.ini:/usr/local/etc/php/conf.d/local.ini
+    user: www
     networks:
       - app-network
     depends_on:
