@@ -12,11 +12,19 @@ By default, you will get a mysql instance when you run docker-compose up. If you
 
 You can edit the dockerfile to adjust it to your needs.
 
-#### There is no composer installed in the php container. If you need composer just use it the docker way:
+The php container comes pre-installed with composer, npm and yarn.
+
+#### Want to start a new project but don't have composer installed?
 ```bash
 docker run --rm --interactive --tty \
   --volume $PWD:/app \
   composer <command>
+```
+
+```bash
+docker run --rm --interactive --tty \
+  --volume $PWD:/app \
+  composer create-project laravel/laravel example-project
 ```
 
 ## Troubleshooting
