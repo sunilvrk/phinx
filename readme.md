@@ -10,6 +10,8 @@ PHP-FPM, Nginx & MySQL
 
 By default, you will get a mysql instance when you run docker-compose up. If you don't need a database you can comment this piece of code.
 
+If you need redis you can just uncomment the block in the docker-compose file.
+
 You can edit the dockerfile to adjust it to your needs.
 
 The php container comes pre-installed with composer, npm and yarn.
