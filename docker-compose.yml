@@ -5,14 +5,14 @@ services:
   app:
     build:
       context: phinx
-      dockerfile: runtimes/8.1/Dockerfile
+      dockerfile: runtimes/8.2/Dockerfile
     restart: unless-stopped
     tty: true
     ports:
       - 9000:9000
     volumes:
       - ./:/var/www
-      - ./phinx/runtimes/8.1/php.ini:/usr/local/etc/php/conf.d/local.ini
+      - ./phinx/runtimes/8.2/php.ini:/usr/local/etc/php/conf.d/local.ini
     user: www
     networks:
       - app-network
@@ -63,6 +63,8 @@ services:
       PMA_HOST: db
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-secret}
       UPLOAD_LIMIT: 2000M
+    volumes:
+      - ./phinx/runtimes/8.2/phpmyadmin/config.user.inc.php:/etc/phpmyadmin/config.user.inc.php
     networks:
       - app-network
 
